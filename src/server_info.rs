@@ -27,7 +27,9 @@ impl ServerInfo {
 
         let mut vars: HashMap<String, String> = HashMap::new();
         let mut server_raw = server_raw.split("\\");
-        server_raw.next(); // Remove empty first element
+
+        // Remove empty first element
+        server_raw.next();
 
         for _i in 0..server_raw.clone().count() {
             if let Some(key) = server_raw.next() {
