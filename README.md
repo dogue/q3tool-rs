@@ -29,4 +29,4 @@ We use [Semantic Versioning](http://semver.org/) for versioning.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE.md)
+This project is licensed under the [MIT License](LICENSE)
