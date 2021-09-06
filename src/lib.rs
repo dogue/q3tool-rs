@@ -1,3 +1,17 @@
+//! A zero-dependency (except `std`) pure Rust library for interacting with ioq3 (Quake 3) based game servers.
+//!
+//! Provides an interface for getting C_VARs and a player list.
+//!
+//! ```rust
+//! use q3tool::Q3Tool;
+//!
+//! fn main() {
+//!     let server_info = Q3Tool::new("127.0.0.1:27960").get_status();
+//!     for p in server_info.players.0 {
+//!         println!("Name: {}, Score: {}, Ping: {}", p.name, p.score, p.ping);
+//!     }
+//! }
+
 pub mod player_info;
 pub mod player_list;
 pub mod server_info;

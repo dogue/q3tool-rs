@@ -3,6 +3,19 @@ use std::collections::HashMap;
 
 #[derive(Debug, Clone)]
 pub struct ServerInfo {
+    /// Keys of the `HashMap` are the same as they appear in raw output from the server. See the (truncated) example below.
+    ///
+    /// ```plain
+    /// fraglimit: 0
+    /// g_waverespawns: 0
+    /// g_redwave: 15
+    /// g_stratTime: 5
+    /// timelimit: 20
+    /// capturelimit: 8
+    /// g_roundtime: 2
+    /// sv_hostname: ^7|^1RFA^7| ^2RisenFromAshes.us
+    /// sv_maxPing: 0
+    /// ```
     pub vars: HashMap<String, String>,
     pub players: PlayerList,
 }
