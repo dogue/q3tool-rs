@@ -12,6 +12,8 @@ impl PlayerList {
             player_list.push(PlayerInfo::new(p)?);
         }
 
+        player_list.pop(); // Remove empty last element
+
         Ok(Self(player_list))
     }
 }
