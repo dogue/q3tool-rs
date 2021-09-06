@@ -4,7 +4,7 @@
 A zero-dependency (except `std`) pure Rust library for interacting with ioq3 (Quake 3) based game servers.
 
 [![Rust](https://github.com/dogue/q3tool-rs/actions/workflows/rust.yml/badge.svg)](https://github.com/dogue/q3tool-rs/actions/workflows/rust.yml)
-[![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://GitHub.com/dogue/q3tool-rs/issues/)
+[![GitHub issues](https://img.shields.io/github/issues/dogue/q3tool-rs.svg)](https://GitHub.com/dogue/q3tool-rs/issues/)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
 ## Getting Started
