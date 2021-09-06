@@ -1,5 +1,7 @@
 #[derive(Debug, Clone)]
 pub struct PlayerInfo {
+    /// Names are passed as-is, meaning color escape codes are still present.
+    /// A method for stripping these *may* be implemented in the future.
     pub name: String,
     pub score: i32,
     pub ping: i32,
