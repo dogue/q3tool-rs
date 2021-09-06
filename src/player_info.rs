@@ -1,3 +1,5 @@
+use crate::q3_error::Q3Error;
+
 #[derive(Debug, Clone)]
 pub struct PlayerInfo {
     /// Names are passed as-is, meaning color escape codes are still present.
@@ -8,21 +10,13 @@ pub struct PlayerInfo {
 }
 
 impl PlayerInfo {
-    pub fn new(player: &str) -> Self {
+    pub fn new(player: &str) -> Result<Self, Q3Error> {
         let mut player = player.splitn(3, " ");
-        let score = player
-            .next()
-            .unwrap_or_else(|| &"")
-            .parse()
-            .unwrap_or_default();
-        let ping = player
-            .next()
-            .unwrap_or_else(|| &"")
-            .parse()
-            .unwrap_or_default();
+        let score = player.next().unwrap_or_else(|| &"").parse()?;
+        let ping = player.next().unwrap_or_else(|| &"").parse()?;
         let name = String::from(player.next().unwrap_or_else(|| &""));
 
-        Self { name, score, ping }
+        Ok(Self { name, score, ping })
     }
 }
 
@@ -34,19 +28,19 @@ mod test {
 
     #[test]
     fn extract_score() {
-        let p = PlayerInfo::new(TEST_STR);
+        let p = PlayerInfo::new(TEST_STR).unwrap();
         assert_eq!(11, p.score);
     }
 
     #[test]
     fn extract_ping() {
-        let p = PlayerInfo::new(TEST_STR);
+        let p = PlayerInfo::new(TEST_STR).unwrap();
         assert_eq!(194, p.ping);
     }
 
     #[test]
     fn extract_name() {
-        let p = PlayerInfo::new(TEST_STR);
+        let p = PlayerInfo::new(TEST_STR).unwrap();
         assert_eq!("\"killer\"", p.name);
     }
 }

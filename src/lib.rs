@@ -1,4 +1,4 @@
-//! A zero-dependency (except `std`) pure Rust library for interacting with ioq3 (Quake 3) based game servers.
+//! A Rust library for interacting with ioq3 (Quake 3) based game servers.
 //!
 //! Provides an interface for getting C_VARs and a player list.
 //!
@@ -6,7 +6,7 @@
 //! use q3tool::Q3Tool;
 //!
 //! fn main() {
-//!     let server_info = Q3Tool::new("127.0.0.1:27960").get_status();
+//!     let server_info = Q3Tool::new("127.0.0.1:27960").get_status().unwrap();
 //!     for p in server_info.players.0 {
 //!         println!("Name: {}, Score: {}, Ping: {}", p.name, p.score, p.ping);
 //!     }
@@ -14,10 +14,12 @@
 
 pub mod player_info;
 pub mod player_list;
+pub mod q3_error;
 pub mod server_info;
 
 use std::net;
 
+use q3_error::Q3Error;
 use server_info::ServerInfo;
 
 #[derive(Debug)]
@@ -34,19 +36,19 @@ impl Q3Tool {
         }
     }
 
-    pub fn get_status(&self) -> ServerInfo {
+    pub fn get_status(&self) -> Result<ServerInfo, Q3Error> {
         let socket = net::UdpSocket::bind("0.0.0.0:0").unwrap();
-        socket.connect(&self.host).unwrap();
+        socket.connect(&self.host)?;
 
         let mut buffer = [0; 2048];
 
-        socket.send(b"\xFF\xFF\xFF\xFFgetstatus").unwrap();
-        socket.recv(&mut buffer).unwrap();
+        socket.send(b"\xFF\xFF\xFF\xFFgetstatus")?;
+        socket.recv(&mut buffer)?;
 
         let raw_info = String::from_utf8_lossy(&buffer);
         let (_header, raw_info) = raw_info.split_once("\n").unwrap();
 
-        ServerInfo::new(raw_info)
+        Ok(ServerInfo::new(raw_info)?)
     }
 }
 

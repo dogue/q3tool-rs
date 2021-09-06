@@ -1,3 +1,5 @@
+use crate::q3_error::Q3Error;
+
 use super::player_list::PlayerList;
 use std::collections::HashMap;
 
@@ -21,9 +23,9 @@ pub struct ServerInfo {
 }
 
 impl ServerInfo {
-    pub fn new(raw: &str) -> Self {
-        let (server_raw, player_raw) = raw.split_once("\n").unwrap();
-        let players = PlayerList::new(player_raw);
+    pub fn new(raw: &str) -> Result<Self, Q3Error> {
+        let (server_raw, player_raw) = raw.split_once("\n").unwrap_or_default();
+        let players = PlayerList::new(player_raw)?;
 
         let mut vars: HashMap<String, String> = HashMap::new();
         let mut server_raw = server_raw.split("\\");
@@ -40,6 +42,6 @@ impl ServerInfo {
             }
         }
 
-        Self { vars, players }
+        Ok(Self { vars, players })
     }
 }
