@@ -37,7 +37,7 @@ impl Q3Tool {
     }
 
     pub fn get_status(&self) -> Result<ServerInfo, Q3Error> {
-        let socket = net::UdpSocket::bind("0.0.0.0:0").unwrap();
+        let socket = net::UdpSocket::bind("0.0.0.0:0")?;
         socket.connect(&self.host)?;
 
         let mut buffer = [0; 2048];
