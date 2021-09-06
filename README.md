@@ -14,11 +14,16 @@ use q3tool::Q3Tool;
 
 fn main() {
     let q = Q3Tool::new("someserverhost:27960");
-    let server_info = q.get_status();
+    let server_info = q.get_status().unwrap();
     
     // Print all public server c_vars
-    for (k, v) in server_info.vars {
+    for (k, v) in server_info.vars() {
         println!("{}: {}", k, v);
+    }
+
+    // Print all players
+    for player in server_info.players() {
+        println!("Name: {}, Score: {}, Ping: {}", player.name(), player.score(), player.ping());
     }
 }
 ```

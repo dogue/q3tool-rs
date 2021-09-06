@@ -1,4 +1,4 @@
-use crate::q3_error::Q3Error;
+use crate::{player_info::PlayerInfo, q3_error::Q3Error};
 
 use super::player_list::PlayerList;
 use std::collections::HashMap;
@@ -18,8 +18,8 @@ pub struct ServerInfo {
     /// sv_hostname: ^7|^1RFA^7| ^2RisenFromAshes.us
     /// sv_maxPing: 0
     /// ```
-    pub vars: HashMap<String, String>,
-    pub players: PlayerList,
+    vars: HashMap<String, String>,
+    players: PlayerList,
 }
 
 impl ServerInfo {
@@ -43,5 +43,13 @@ impl ServerInfo {
         }
 
         Ok(Self { vars, players })
+    }
+
+    pub fn vars(&self) -> &HashMap<String, String> {
+        &self.vars
+    }
+
+    pub fn players(&self) -> &Vec<PlayerInfo> {
+        &self.players.0
     }
 }

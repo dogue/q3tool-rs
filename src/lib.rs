@@ -5,12 +5,20 @@
 //! ```no_run
 //! use q3tool::Q3Tool;
 //!
-//! fn main() {
-//!     let server_info = Q3Tool::new("127.0.0.1:27960").get_status().unwrap();
-//!     for p in server_info.players.0 {
-//!         println!("Name: {}, Score: {}, Ping: {}", p.name, p.score, p.ping);
-//!     }
+//! # fn main() {
+//! let q = Q3Tool::new("someserverhost:27960");
+//! let server_info = q.get_status().unwrap();
+//!    
+//! // Print all public server c_vars
+//! for (k, v) in server_info.vars() {
+//!     println!("{}: {}", k, v);
 //! }
+//!
+//! // Print all players
+//! for player in server_info.players() {
+//!     println!("Name: {}, Score: {}, Ping: {}", player.name(), player.score(), player.ping());
+//! }
+//! # }
 
 pub mod player_info;
 pub mod player_list;
