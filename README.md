@@ -18,8 +18,14 @@ fn main() {
     }
 }
 ```
+
+## Current Status
+
+Q3Tool is still very early in development. So far it seems to work fine, but there are likely to be breaking changes in the future.
+Error handling is currently non-existent. This is being worked on.
+
 ## Running the tests
-Tests are not yet implemented but will be coming soon:tm:.
+Tests are somwhat lacking at the moment, but this is being worked on.
 
 `cargo test`
 
