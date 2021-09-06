@@ -5,7 +5,6 @@ edition = "2018"
 authors = ["Dogue"]
 repository = "https://github.com/dogue/q3tool-rs"
 homepage = "https://github.com/dogue/q3tool-rs"
-license = "MIT"
 license-file = "LICENSE"
 readme = "README.md"
 description = "A zero-dependency (except std) pure Rust library for interacting with ioq3 (Quake 3) based game servers."
