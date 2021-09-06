@@ -2,7 +2,7 @@
 //!
 //! Provides an interface for getting C_VARs and a player list.
 //!
-//! ```rust
+//! ```no_run
 //! use q3tool::Q3Tool;
 //!
 //! fn main() {
@@ -51,9 +51,4 @@ impl Q3Tool {
 }
 
 #[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
-}
+mod tests {}
