@@ -2,6 +2,14 @@
 name = "q3tool"
 version = "0.1.0"
 edition = "2018"
+authors = ["Dogue"]
+repository = "https://github.com/dogue/q3tool-rs"
+homepage = "https://github.com/dogue/q3tool-rs"
+license = "MIT"
+license-file = "LICENSE"
+readme = "README.md"
+description = "A zero-dependency (except std) pure Rust library for interacting with ioq3 (Quake 3) based game servers."
+keywords = ["quake", "games"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
