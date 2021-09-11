@@ -14,3 +14,4 @@ keywords = ["quake", "games"]
 
 [dependencies]
 thiserror = "1.0.29"
+byte-strings = "0.1.3"

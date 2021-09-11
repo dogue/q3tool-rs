@@ -2,8 +2,6 @@ use crate::q3_error::Q3Error;
 
 #[derive(Debug, Clone)]
 pub struct PlayerInfo {
-    /// Names are passed as-is, meaning color escape codes are still present.
-    /// A method for stripping these *may* be implemented in the future.
     name: String,
     score: i32,
     ping: i32,
@@ -11,31 +9,29 @@ pub struct PlayerInfo {
 
 impl PlayerInfo {
     pub fn new(player: &str) -> Result<Self, Q3Error> {
-        let mut player = player.splitn(3, " ");
+        let mut player = player.splitn(3, ' ');
 
-        let score = player
-            .next()
-            .unwrap_or_else(|| &"0")
-            .parse()
-            .unwrap_or_default();
-        let ping = player
-            .next()
-            .unwrap_or_else(|| &"0")
-            .parse()
-            .unwrap_or_default();
-        let name = String::from(player.next().unwrap_or_else(|| &""));
+        let score = player.next().unwrap_or("0").parse().unwrap_or_default();
+        let ping = player.next().unwrap_or("0").parse().unwrap_or_default();
+        let name = String::from(player.next().unwrap_or("0"));
 
         Ok(Self { name, score, ping })
     }
 
+    /// Names are passed as-is, meaning color escape codes and double quotes are still present.
+    /// A method for stripping/interpreting these *may* be implemented in the future.
+    ///
+    /// [See here](https://www.computerhope.com/issues/ch000658.htm) for more information on Q3 color codes.
     pub fn name(&self) -> &String {
         &self.name
     }
 
+    /// Player frag count. Represented in-engine as "score".
     pub fn score(&self) -> &i32 {
         &self.score
     }
 
+    /// Player latency
     pub fn ping(&self) -> &i32 {
         &self.ping
     }
