@@ -1,5 +1,6 @@
-use crate::q3_error::Q3Error;
+use crate::error::Q3Error;
 
+/// Represents a single player
 #[derive(Debug, Clone)]
 pub struct PlayerInfo {
     name: String,
@@ -8,32 +9,26 @@ pub struct PlayerInfo {
 }
 
 impl PlayerInfo {
-    pub fn new(player: &str) -> Result<Self, Q3Error> {
+    pub fn new(player: String) -> Result<Self, Q3Error> {
         let mut player = player.splitn(3, ' ');
 
-        let score = player.next().unwrap_or("0").parse().unwrap_or_default();
-        let ping = player.next().unwrap_or("0").parse().unwrap_or_default();
-        let name = String::from(player.next().unwrap_or("0"));
+        let score = player.next().unwrap_or_default().parse()?;
+        let ping = player.next().unwrap_or_default().parse()?;
+        let name = player.next().unwrap_or_default().to_string();
 
         Ok(Self { name, score, ping })
     }
 
-    /// Names are passed as-is, meaning color escape codes and double quotes are still present.
-    /// A method for stripping/interpreting these *may* be implemented in the future.
-    ///
-    /// [See here](https://www.computerhope.com/issues/ch000658.htm) for more information on Q3 color codes.
     pub fn name(&self) -> &String {
         &self.name
     }
 
-    /// Player frag count. Represented in-engine as "score".
-    pub fn score(&self) -> &i32 {
-        &self.score
+    pub fn score(&self) -> i32 {
+        self.score
     }
 
-    /// Player latency
-    pub fn ping(&self) -> &i32 {
-        &self.ping
+    pub fn ping(&self) -> i32 {
+        self.ping
     }
 }
 
@@ -41,23 +36,42 @@ impl PlayerInfo {
 mod test {
     use super::*;
 
-    const TEST_STR: &'static str = "11 194 \"killer\"";
+    const VALID_PLAYER: &'static str = "11 194 \"dogue\"";
+    const INVALID_SCORE: &'static str = "a 194 \"dogue\"";
+    const INVALID_PING: &'static str = "11 a \"dogue\"";
 
     #[test]
-    fn extract_score() {
-        let p = PlayerInfo::new(TEST_STR).unwrap();
-        assert_eq!(11, p.score);
+    fn parses_score() {
+        let p = PlayerInfo::new(VALID_PLAYER.to_string());
+        assert!(p.is_ok());
+        assert_eq!(11, p.unwrap().score());
     }
 
     #[test]
-    fn extract_ping() {
-        let p = PlayerInfo::new(TEST_STR).unwrap();
-        assert_eq!(194, p.ping);
+    fn parses_ping() {
+        let p = PlayerInfo::new(VALID_PLAYER.to_string());
+        assert!(p.is_ok());
+        assert_eq!(194, p.unwrap().ping());
     }
 
     #[test]
-    fn extract_name() {
-        let p = PlayerInfo::new(TEST_STR).unwrap();
-        assert_eq!("\"killer\"", p.name);
+    fn parses_name() {
+        let p = PlayerInfo::new(VALID_PLAYER.to_string());
+        assert!(p.is_ok());
+        assert_eq!("\"dogue\"", p.unwrap().name());
+    }
+
+    #[test]
+    fn parseint_error_on_invalid_score() {
+        let p = PlayerInfo::new(INVALID_SCORE.to_string());
+        assert!(p.is_err());
+        assert!(matches!(p.err(), Some(Q3Error::ParseError(_))));
+    }
+
+    #[test]
+    fn parseint_error_on_invalid_ping() {
+        let p = PlayerInfo::new(INVALID_PING.to_string());
+        assert!(p.is_err());
+        assert!(matches!(p.err(), Some(Q3Error::ParseError(_))))
     }
 }
