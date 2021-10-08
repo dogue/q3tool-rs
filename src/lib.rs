@@ -1,3 +1,28 @@
+//! A Rust library for interacting with ioq3 (Quake 3) based game servers.
+//!
+//! Provides an interface for getting C_VARs and a player list.
+//!
+//! ```no_run
+//! use q3tool::Q3Tool;
+//!
+//! # fn main() {
+//! let q = Q3Tool::new("someserverhost:27960");
+//! let server_info = q.get_status().unwrap();
+//!    
+//! // Print all public server c_vars
+//! for (k, v) in server_info.vars() {
+//!     println!("{}: {}", k, v);
+//! }
+//!
+//! // Print a single server c_var
+//! println!("Hostname: {}", server_info.vars().get("sv_hostname").unwrap());
+//!
+//! // Print all players
+//! for player in server_info.players() {
+//!     println!("Name: {}, Score: {}, Ping: {}", player.name(), player.score(), player.ping());
+//! }
+//! # }
+
 pub mod error;
 pub mod player_info;
 pub mod server_info;
@@ -14,6 +39,7 @@ pub struct Q3Tool<'a> {
 }
 
 impl<'a> Q3Tool<'a> {
+    /// Creates a new instance of the Q3Tool struct but does not perform any requests
     pub fn new(host: &'a str) -> Self {
         Self {
             host,
@@ -21,6 +47,7 @@ impl<'a> Q3Tool<'a> {
         }
     }
 
+    /// Sends a UDP `getstatus` packet to the host and parses the response into a [ServerInfo]
     pub fn get_status(&self) -> Result<ServerInfo, Q3Error> {
         let info = Self::send_request(&self)?;
         let info = Self::parse_response(info)?;

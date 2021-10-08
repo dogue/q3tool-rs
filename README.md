@@ -21,6 +21,9 @@ fn main() {
         println!("{}: {}", k, v);
     }
 
+    // Print a single server c_var
+    println!("Hostname: {}", server_info.vars().get("sv_hostname").unwrap());
+
     // Print all players
     for player in server_info.players() {
         println!("Name: {}, Score: {}, Ping: {}", player.name(), player.score(), player.ping());
@@ -30,16 +33,12 @@ fn main() {
 
 ## Current Status
 
-Q3Tool is still very early in development. So far it seems to work fine, but there are likely to be breaking changes in the future.
+Q3Tool is still in development.
+
+There *shouldn't* be any breaking changes in the public facing API at this point.
 
 ## Running the tests
-Tests are somwhat lacking at the moment, but this is being worked on.
-
 `cargo test`
-
-## Versioning
-
-We use [Semantic Versioning](http://semver.org/) for versioning.
 
 ## License
 

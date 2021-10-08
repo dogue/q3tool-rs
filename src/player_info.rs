@@ -1,5 +1,6 @@
 use crate::error::Q3Error;
 
+/// Represents a single player
 #[derive(Debug, Clone)]
 pub struct PlayerInfo {
     name: String,

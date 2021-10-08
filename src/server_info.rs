@@ -3,6 +3,7 @@ use crate::player_info::PlayerInfo;
 
 use std::collections::HashMap;
 
+/// Contains a `HashMap<String, String>` of server variables, and a `Vec<PlayerInfo>` list of currently online players
 #[derive(Debug, Clone)]
 pub struct ServerInfo {
     vars: HashMap<String, String>,
