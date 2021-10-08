@@ -3,13 +3,14 @@ use crate::player_info::PlayerInfo;
 
 use std::collections::HashMap;
 
-pub struct ServerInfo<'a> {
-    vars: HashMap<&'a str, &'a str>,
-    players: Vec<PlayerInfo<'a>>,
+#[derive(Debug, Clone)]
+pub struct ServerInfo {
+    vars: HashMap<String, String>,
+    players: Vec<PlayerInfo>,
 }
 
-impl<'a> ServerInfo<'a> {
-    pub fn new(raw_info: &'a str) -> Result<ServerInfo<'a>, Q3Error> {
+impl ServerInfo {
+    pub fn new(raw_info: String) -> Result<ServerInfo, Q3Error> {
         let (server_chunk, player_chunk) = raw_info.split_once('\n').unwrap_or_default();
         let vars = Self::build_server_vars(server_chunk);
         let players = Self::build_player_list(player_chunk)?;
@@ -17,7 +18,7 @@ impl<'a> ServerInfo<'a> {
         Ok(Self { vars, players })
     }
 
-    pub fn vars(&self) -> &HashMap<&'a str, &'a str> {
+    pub fn vars(&self) -> &HashMap<String, String> {
         &self.vars
     }
 
@@ -25,8 +26,8 @@ impl<'a> ServerInfo<'a> {
         &self.players
     }
 
-    fn build_server_vars(server_chunk: &'a str) -> HashMap<&'a str, &'a str> {
-        let mut vars: HashMap<&'a str, &'a str> = HashMap::new();
+    fn build_server_vars(server_chunk: &str) -> HashMap<String, String> {
+        let mut vars: HashMap<String, String> = HashMap::new();
 
         let mut server_chunk = server_chunk.split('\\');
         server_chunk.next(); // Discard garbage first element
@@ -34,7 +35,7 @@ impl<'a> ServerInfo<'a> {
         for _i in 0..server_chunk.clone().count() {
             if let Some(key) = server_chunk.next() {
                 let value = server_chunk.next().unwrap_or_default();
-                vars.insert(key, value);
+                vars.insert(key.to_string(), value.to_string());
             } else {
                 break;
             }
@@ -43,7 +44,7 @@ impl<'a> ServerInfo<'a> {
         vars
     }
 
-    fn build_player_list(player_chunk: &'a str) -> Result<Vec<PlayerInfo>, Q3Error> {
+    fn build_player_list(player_chunk: &str) -> Result<Vec<PlayerInfo>, Q3Error> {
         let mut player_list: Vec<PlayerInfo> = Vec::new();
 
         for p in player_chunk.split('\n') {
@@ -51,7 +52,7 @@ impl<'a> ServerInfo<'a> {
             // This signals the end of the player list
             let c = p.chars().nth(0).unwrap();
             if c != '\u{0}' {
-                player_list.push(PlayerInfo::new(p)?);
+                player_list.push(PlayerInfo::new(p.to_string())?);
             }
         }
 
@@ -87,14 +88,14 @@ mod test {
     #[test]
     fn returns_server_vars() {
         let combined_chunk = format!("{}\n{}", VALID_SERVER_CHUNK, VALID_PLAYER_CHUNK);
-        let s = ServerInfo::new(&combined_chunk).unwrap();
+        let s = ServerInfo::new(combined_chunk).unwrap();
         assert_eq!(s.vars().get("sv_maxclients").unwrap(), &"22");
     }
 
     #[test]
     fn returns_player_list() {
         let combined_chunk = format!("{}\n{}", VALID_SERVER_CHUNK, VALID_PLAYER_CHUNK);
-        let s = ServerInfo::new(&combined_chunk).unwrap();
+        let s = ServerInfo::new(combined_chunk).unwrap();
         assert_eq!(s.players().len(), 3);
         assert_eq!(s.players()[0].name(), "\"dogue\"");
     }
