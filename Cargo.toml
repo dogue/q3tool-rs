@@ -1,6 +1,6 @@
 [package]
 name = "q3tool"
-version = "0.3.1"
+version = "0.3.2"
 edition = "2018"
 authors = ["Dogue"]
 repository = "https://github.com/dogue/q3tool-rs"
