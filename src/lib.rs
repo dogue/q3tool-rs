@@ -6,7 +6,7 @@
 //! use q3tool::Q3Tool;
 //!
 //! # fn main() {
-//! let q = Q3Tool::new("someserverhost:27960", Some("supersecretpassword"));
+//! let q = Q3Tool::new("someserverhost:27960", Some("supersecretpassword".to_owned()));
 //! let server_info = q.get_status().unwrap();
 //!    
 //! // Print all public server c_vars
