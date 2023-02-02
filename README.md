@@ -3,7 +3,6 @@
 
 A Rust library for interacting with ioq3 (Quake 3) based game servers.
 
-[![Rust](https://github.com/dogue/q3tool-rs/actions/workflows/rust.yml/badge.svg)](https://github.com/dogue/q3tool-rs/actions/workflows/rust.yml)
 [![GitHub issues](https://img.shields.io/github/issues/dogue/q3tool-rs.svg)](https://GitHub.com/dogue/q3tool-rs/issues/)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
@@ -33,7 +32,7 @@ fn main() {
 
 ## Current Status
 
-Q3Tool is still in development.
+Q3Tool is essentially feature-complete. RCON is finally implemented and it is able to retrieve data from any compatible ioq3 server that I can test. If you encounter any bugs, please don't hesitate to open an issue.
 
 There *shouldn't* be any breaking changes in the public facing API at this point.
 
