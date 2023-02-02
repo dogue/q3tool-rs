@@ -12,7 +12,7 @@ A Rust library for interacting with ioq3 (Quake 3) based game servers.
 use q3tool::Q3Tool;
 
 fn main() {
-    let q = Q3Tool::new("someserverhost:27960");
+    let q = Q3Tool::new("someserverhost:27960", Some("supersecretpassword"));
     let server_info = q.get_status().unwrap();
     
     // Print all public server c_vars
@@ -27,6 +27,8 @@ fn main() {
     for player in server_info.players() {
         println!("Name: {}, Score: {}, Ping: {}", player.name(), player.score(), player.ping());
     }
+
+    let response = q.rcon("map ut4_casa").unwrap();
 }
 ```
 
