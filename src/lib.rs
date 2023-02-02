@@ -30,28 +30,48 @@ pub mod server_info;
 use crate::error::Q3Error;
 use crate::server_info::ServerInfo;
 
+use format_bytes::format_bytes;
 use std::net;
 
 #[derive(Debug)]
-pub struct Q3Tool<'a> {
-    _password: Option<&'a str>,
-    host: &'a str,
+pub struct Q3Tool {
+    password: Option<String>,
+    host: String,
 }
 
-impl<'a> Q3Tool<'a> {
+impl Q3Tool {
     /// Creates a new instance of the Q3Tool struct but does not perform any requests
-    pub fn new(host: &'a str) -> Self {
+    pub fn new(host: &str, password: Option<String>) -> Self {
         Self {
-            host,
-            _password: None,
+            host: host.to_owned(),
+            password,
         }
     }
 
     /// Sends a UDP `getstatus` packet to the host and parses the response into a [ServerInfo]
     pub fn get_status(&self) -> Result<ServerInfo, Q3Error> {
-        let info = Self::send_request(&self)?;
+        let info = self.send_request()?;
         let info = Self::parse_response(info)?;
         Ok(info)
+    }
+
+    /// Sends an RCON command to the host
+    /// Returns the server response as a String
+    pub fn rcon(&self, command: &str) -> Result<String, Q3Error> {
+        let socket = self.create_socket()?;
+        let mut buffer = [0; 2048];
+
+        let request = format_bytes!(
+            b"\xFF\xFF\xFF\xFFrcon {} {}",
+            self.password.as_ref().unwrap().as_bytes(),
+            command.as_bytes()
+        );
+        socket.send(&request)?;
+        socket.recv(&mut buffer)?;
+
+        let response = String::from_utf8_lossy(&buffer).into_owned();
+
+        Ok(response)
     }
 
     fn create_socket(&self) -> Result<net::UdpSocket, Q3Error> {
@@ -61,7 +81,7 @@ impl<'a> Q3Tool<'a> {
     }
 
     fn send_request(&self) -> Result<String, Q3Error> {
-        let socket = Self::create_socket(&self)?;
+        let socket = self.create_socket()?;
         let mut buffer = [0; 2048];
 
         socket.send(b"\xFF\xFF\xFF\xFFgetstatus")?;

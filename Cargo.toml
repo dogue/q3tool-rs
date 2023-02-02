@@ -1,6 +1,6 @@
 [package]
 name = "q3tool"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2018"
 authors = ["Dogue"]
 repository = "https://github.com/dogue/q3tool-rs"
@@ -13,3 +13,4 @@ keywords = ["quake", "games"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+format-bytes = "0.3.0"
